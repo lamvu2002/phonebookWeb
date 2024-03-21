@@ -3,10 +3,12 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import axios from "../api/axios";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import useAuth from "../hooks/useAuth";
 const AddContactModal = ({ categories, subcategories, onAddContact }) => {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
+  const { auth } = useAuth();
   const [contactData, setContactData] = useState({
     name: "",
     emailAddress: "",
@@ -51,6 +53,7 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.accessToken}`,
           },
         }
       );
@@ -97,7 +100,6 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
   };
   return (
     <div>
-      <Toaster position="top-center" />
       <Button
         className="text-primary-emphasis"
         onClick={handleOpen}

@@ -47,7 +47,14 @@ const Admin = () => {
   const onChangeContact = (newContacts) => {
     // Update contacts state with the latest data (including added or deleted)
     setContacts(newContacts);
-    setFilteredContacts(newContacts);
+    if (selectedSubcategoryId) {
+      const filteredContacts = newContacts.filter(
+        (contact) => contact.subcategoryId === selectedSubcategoryId
+      );
+      setFilteredContacts(filteredContacts);
+    } else {
+      setFilteredContacts(newContacts);
+    }
   };
 
   useEffect(() => {
@@ -86,7 +93,13 @@ const Admin = () => {
         </td>
         <td className="bg-info-subtle bg-opacity-10 text-wrap ">
           <div className="d-flex align-middle justify-content-center">
-            <EditButton />
+            <EditButton
+              categories={categories}
+              subcategories={subcategories}
+              onEditContact={onChangeContact}
+              contactId={contact.contactId}
+              contacts={contacts}
+            />
             <DeleteButton
               contactId={contact.contactId}
               onDeleteContact={onChangeContact}

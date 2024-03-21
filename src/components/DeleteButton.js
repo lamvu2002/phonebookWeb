@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 const DeleteButton = ({ contactId, onDeleteContact }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -20,7 +20,6 @@ const DeleteButton = ({ contactId, onDeleteContact }) => {
         },
       });
       const reload = await axios.get("/api/Contacts"); // Replace with your endpoint
-      console.log(reload.danpmta);
       onDeleteContact(reload.data);
       handleClose();
       toast.success("Contact deleted successfully!");
@@ -44,7 +43,6 @@ const DeleteButton = ({ contactId, onDeleteContact }) => {
 
   return (
     <div>
-      <Toaster position="top-center" />
       <Button color="warning" onClick={handleOpen}>
         <DeleteIcon />
       </Button>
@@ -60,7 +58,7 @@ const DeleteButton = ({ contactId, onDeleteContact }) => {
             <Button className="btn-close" onClick={handleClose}></Button>
           </div>
           <div className="mb-3">
-            <p className="text-center">Are you sure you want to delete?</p>
+            <p className="text-center">Permanently delete this contact?</p>
           </div>
           <div className="d-flex justify-content-between">
             <span className="text-start delete-button" onClick={handleDelete}>
