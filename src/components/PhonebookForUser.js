@@ -65,10 +65,18 @@ const PhonebookForUser = () => {
         <td className="bg-info-subtle bg-opacity-10">
           <img alt="Avatar" src={contact.imageLink} />
         </td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.name}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.phoneNumber}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.emailAddress}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.address}</td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.name}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.phoneNumber}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.emailAddress}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.address}
+        </td>
       </tr>
     );
   };
@@ -169,6 +177,12 @@ const PhonebookForUser = () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
     setAuth({});
+    setCategories([]);
+    setContacts([]);
+    setFilteredContacts([]);
+    setSubcategories([]);
+    setSelectedSubcategoryId(null);
+    setCurrentPage(1);
     navigate("/login");
   };
   const admin = async () => {
@@ -238,7 +252,7 @@ const PhonebookForUser = () => {
         <div className="d-flex flex-grow-1 col-sm-8">
           {contacts.length > 0 && (
             <div className="flex-grow-1">
-              <Table striped bordered hover className="h-100 ">
+              <Table striped bordered hover className="h-100 text-break">
                 <thead>
                   <tr>
                     <th className="bg-info text-dark">

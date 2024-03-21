@@ -8,10 +8,12 @@ const SearchModal = ({ type, onSearch }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [inputValue, setInputValue] = useState("");
+
   const handleSearch = () => {
     onSearch(inputValue);
     handleClose();
   };
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -46,6 +48,7 @@ const SearchModal = ({ type, onSearch }) => {
               className="form-control"
               placeholder={type}
               onChange={(e) => setInputValue(e.target.value)}
+              autoFocus
             />
             <Button
               className="input-group-text"

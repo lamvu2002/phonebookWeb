@@ -45,7 +45,6 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
   };
   const handleAddContact = async () => {
     try {
-      console.log(JSON.stringify(contactData));
       const response = await axios.post(
         "/api/Contacts",
         JSON.stringify(contactData),
@@ -56,7 +55,8 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
         }
       );
       toast.success("Contact added successfully: " + response.data.name);
-      onAddContact(); // Trigger the onAddContact function passed from the parent component
+      const reload = await axios.get("/api/Contacts"); // Replace with your endpoint
+      onAddContact(reload.data);
     } catch (error) {
       toast.error("Failed to add contact: " + error);
       // Handle the error
@@ -137,7 +137,7 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
 
             <label>Phone Number:</label>
             <input
-              type="text"
+              type="tel"
               name="phoneNumber"
               value={contactData.phoneNumber}
               onChange={handleInputChange}

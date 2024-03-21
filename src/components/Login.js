@@ -39,13 +39,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      //console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
+
       const accessToken = response.data.token;
       const refreshToken = response.data.refreshtoken;
-      console.log(accessToken);
+
       const decodedToken = jwtDecode(accessToken);
-      console.log(JSON.stringify(decodedToken));
+
       // Extract roles from claims (modify if your claim name is different)
       const roles =
         decodedToken[
@@ -53,7 +52,6 @@ const Login = () => {
         ] || [];
 
       // Use the extracted roles for your application logic
-      console.log(roles);
 
       setAuth({ user, pwd, roles, accessToken, refreshToken });
       setUser("");

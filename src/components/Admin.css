@@ -1,6 +1,6 @@
 .table th,
 .table td {
-  width: calc(100% / 5);
+  width: 300px;
   text-align: left;
   padding: 8px;
   white-space: nowrap;
@@ -18,4 +18,16 @@ img[alt] {
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
+}
+.delete-button:hover,
+.cancel-button:hover {
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: red;
+}
+
+.cancel-button:hover {
+  color: #007bff;
 }

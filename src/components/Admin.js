@@ -13,6 +13,8 @@ import PaginationComponent from "./PaginationComponent";
 import "./Admin.css";
 import SearchModal from "./SearchModal";
 import AddContactModal from "./AddContactModal";
+import DeleteButton from "./DeleteButton";
+import EditButton from "./EditButton";
 const Admin = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
@@ -42,16 +44,12 @@ const Admin = () => {
 
     fetchContacts();
   }, []);
-  const onChangeContact = () => {
-    // Fetch the updated contacts after adding a new contact
-    const fetchContacts = async () => {
-      const response = await axios.get("/api/Contacts"); // Replace with your API endpoint
-      setContacts(response.data);
-      setFilteredContacts(response.data);
-    };
-
-    fetchContacts();
+  const onChangeContact = (newContacts) => {
+    // Update contacts state with the latest data (including added or deleted)
+    setContacts(newContacts);
+    setFilteredContacts(newContacts);
   };
+
   useEffect(() => {
     const fetchSubcategories = async () => {
       const response = await axios.get("/api/Subcategories"); // Replace with your API endpoint
@@ -74,10 +72,27 @@ const Admin = () => {
         <td className="bg-info-subtle bg-opacity-10">
           <img alt="Avatar" src={contact.imageLink} />
         </td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.name}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.phoneNumber}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.emailAddress}</td>
-        <td className="bg-info-subtle bg-opacity-10">{contact.address}</td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.name}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.phoneNumber}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.emailAddress}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+          {contact.address}
+        </td>
+        <td className="bg-info-subtle bg-opacity-10 text-wrap ">
+          <div className="d-flex align-middle justify-content-center">
+            <EditButton />
+            <DeleteButton
+              contactId={contact.contactId}
+              onDeleteContact={onChangeContact}
+            />
+          </div>
+        </td>
       </tr>
     );
   };
@@ -117,11 +132,11 @@ const Admin = () => {
   };
   const handleSearchName = (inputValue) => {
     const normalizedInput = normalizeInput(inputValue);
-    console.log(normalizedInput);
     const filteredContacts = contacts.filter((contact) =>
       normalizeInput(contact.name).includes(normalizedInput)
     );
     setFilteredContacts(filteredContacts);
+
     setCurrentPage(1);
   };
   const handleSearchPhoneNumber = (inputValue) => {
@@ -155,6 +170,12 @@ const Admin = () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
     setAuth({});
+    setCategories([]);
+    setContacts([]);
+    setFilteredContacts([]);
+    setSubcategories([]);
+    setSelectedSubcategoryId(null);
+    setCurrentPage(1);
     navigate("/login");
   };
 
@@ -250,6 +271,9 @@ const Admin = () => {
                         type={"Address"}
                         onSearch={handleSearchAdress}
                       />
+                    </th>
+                    <th className="bg-info text-dark">
+                      <div className="mb-1">Edit/Delete</div>
                     </th>
                   </tr>
                 </thead>
