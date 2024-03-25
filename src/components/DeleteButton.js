@@ -3,9 +3,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import axios from "../api/axios";
+import axios, { axiosPrivate } from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 const DeleteButton = ({ contactId, onDeleteContact }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -13,7 +13,7 @@ const DeleteButton = ({ contactId, onDeleteContact }) => {
   const { auth } = useAuth();
   const handleDelete = async () => {
     try {
-      await axios.delete(`api/Contacts/${contactId}`, {
+      await axiosPrivate.delete(`api/Contacts/${contactId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${auth.accessToken}`,
@@ -43,6 +43,7 @@ const DeleteButton = ({ contactId, onDeleteContact }) => {
 
   return (
     <div>
+      <Toaster position="top-center" />
       <Button color="warning" onClick={handleOpen}>
         <DeleteIcon />
       </Button>

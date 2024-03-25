@@ -3,7 +3,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import axios from "../api/axios";
-import { toast } from "react-hot-toast";
+import { axiosPrivate } from "../api/axios";
+import { Toaster, toast } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
 const AddContactModal = ({ categories, subcategories, onAddContact }) => {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,20 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
     imageLink: "",
   });
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleClose = () => {
+    setContactData({
+      name: "",
+      emailAddress: "",
+      phoneNumber: "",
+      address: "",
+      categoryId: 0,
+      subcategoryId: 0,
+      imageLink: "",
+    });
+    setSelectedCategory(null);
+    setOpen(false);
+  };
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
@@ -47,7 +61,7 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
   };
   const handleAddContact = async () => {
     try {
-      const response = await axios.post(
+      const response = await axiosPrivate.post(
         "/api/Contacts",
         JSON.stringify(contactData),
         {
@@ -98,22 +112,39 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
     boxShadow: 24,
     p: 4,
   };
+  const isFormValid =
+    contactData.name &&
+    contactData.emailAddress &&
+    contactData.phoneNumber &&
+    contactData.address &&
+    contactData.categoryId &&
+    contactData.subcategoryId &&
+    contactData.imageLink;
   return (
     <div>
-      <Button
-        className="text-primary-emphasis"
-        onClick={handleOpen}
-        sx={{
-          fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-          fontWeight: 400,
-          fontSize: "1rem",
-          lineHeight: 1.5,
-          letterSpacing: "0.00938em",
-          textTransform: "none",
-        }}
-      >
-        Add new contact
-      </Button>
+      <Toaster position="top-center" />
+      <div className="button-container">
+        <Button
+          className="text-primary-emphasis "
+          onClick={handleOpen}
+          sx={{
+            padding: 0,
+            justifyContent: "flex-start",
+            width: "100%",
+            boxSizing: "border-box",
+            minWidth: 0,
+            position: "relative",
+            fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+            fontWeight: 400,
+            fontSize: "1rem",
+            lineHeight: 1.5,
+            letterSpacing: "0.00938em",
+            textTransform: "none",
+          }}
+        >
+          <div className="ps-3">Add new contact</div>
+        </Button>
+      </div>
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
           <div className="modal-header d-flex justify-content-between align-items-center mb-3">
@@ -202,7 +233,9 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
 
             <br />
             <div>
-              <Button type="submit">Add Contact</Button>
+              <Button type="submit" disabled={!isFormValid}>
+                Add Contact
+              </Button>
               <Button onClick={handleClose}>Cancel</Button>
             </div>
           </form>

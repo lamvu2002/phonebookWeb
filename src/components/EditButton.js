@@ -3,8 +3,8 @@ import Button from "@mui/material/Button";
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import axios from "../api/axios";
-import { toast } from "react-hot-toast";
+import axios, { axiosPrivate } from "../api/axios";
+import { Toaster, toast } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
 const EditButton = ({
   categories,
@@ -82,7 +82,7 @@ const EditButton = ({
 
     try {
       console.log(contactData);
-      await axios.put(
+      await axiosPrivate.put(
         `api/Contacts/${contactId}`,
         JSON.stringify(contactData),
         {
@@ -129,6 +129,7 @@ const EditButton = ({
   };
   return (
     <div>
+      <Toaster position="top-center" />
       <Button color="success" onClick={handleOpen}>
         <EditIcon />
       </Button>

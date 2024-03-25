@@ -15,6 +15,12 @@ import SearchModal from "./SearchModal";
 import AddContactModal from "./AddContactModal";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
+import AddCategoryModal from "./AddCategoryModal";
+import AddSubcategoryModal from "./AddSubcategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
+import DeleteSubcategoryModal from "./DeleteSubcategoryModal";
+import EditCategoryModal from "./EditCategoryModal";
+import EditSubcategoryModal from "./EditSubcategoryModal";
 const Admin = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
@@ -24,7 +30,6 @@ const Admin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
   const { setAuth } = useContext(AuthContext);
-
   const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
@@ -34,7 +39,16 @@ const Admin = () => {
 
     fetchCategories();
   }, []);
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      const response = await axios.get("/api/Subcategories"); // Replace with your API endpoint
+      setSubcategories(
+        response.data.sort((a, b) => a.subcategoryId - b.subcategoryId)
+      );
+    };
 
+    fetchSubcategories();
+  }, []);
   useEffect(() => {
     const fetchContacts = async () => {
       const response = await axios.get("/api/Contacts"); // Replace with your API endpoint
@@ -56,17 +70,15 @@ const Admin = () => {
       setFilteredContacts(newContacts);
     }
   };
+  const onChangeCategory = (newCategory) => {
+    setCategories(newCategory.sort((a, b) => a.categoryId - b.categoryId));
+  };
+  const onChangeSubcategory = (newSubcategory) => {
+    setSubcategories(
+      newSubcategory.sort((a, b) => a.subcategoryId - b.subcategoryId)
+    );
+  };
 
-  useEffect(() => {
-    const fetchSubcategories = async () => {
-      const response = await axios.get("/api/Subcategories"); // Replace with your API endpoint
-      setSubcategories(
-        response.data.sort((a, b) => a.subcategoryId - b.subcategoryId)
-      );
-    };
-
-    fetchSubcategories();
-  }, []);
   useEffect(() => {
     setCurrentPage(1); // Reset currentPage to 1 when a subcategory is selected
   }, [selectedSubcategoryId]);
@@ -235,6 +247,50 @@ const Admin = () => {
                     )}
                   </TreeItem>
                 ))}
+                <TreeItem nodeId="add" label="Add">
+                  <AddContactModal
+                    categories={categories}
+                    subcategories={subcategories}
+                    onAddContact={onChangeContact}
+                  />
+                  <AddCategoryModal
+                    categories={categories}
+                    onAddCategory={onChangeCategory}
+                  />
+                  <AddSubcategoryModal
+                    subcategories={subcategories}
+                    categories={categories}
+                    onAddSubcategory={onChangeSubcategory}
+                  />
+                </TreeItem>
+                <TreeItem nodeId="delete" label="Delete">
+                  <DeleteCategoryModal
+                    categories={categories}
+                    subcategories={subcategories}
+                    contacts={contacts}
+                    onDeleteCategory={onChangeCategory}
+                    onDeleteSubcategory={onChangeSubcategory}
+                    onDeleteContact={onChangeContact}
+                  />
+                  <DeleteSubcategoryModal
+                    categories={categories}
+                    subcategories={subcategories}
+                    contacts={contacts}
+                    onDeleteSubcategory={onChangeSubcategory}
+                    onDeleteContact={onChangeContact}
+                  />
+                </TreeItem>
+                <TreeItem nodeId="edit" label="Edit">
+                  <EditCategoryModal
+                    categories={categories}
+                    onEditCategory={onChangeCategory}
+                  />
+                  <EditSubcategoryModal
+                    subcategories={subcategories}
+                    categories={categories}
+                    onEditSubcategory={onChangeSubcategory}
+                  />
+                </TreeItem>
                 <TreeItem
                   nodeId="display-all"
                   label="Display all"
@@ -243,11 +299,6 @@ const Admin = () => {
                     setFilteredContacts(contacts);
                     setCurrentPage(1);
                   }}
-                />
-                <AddContactModal
-                  categories={categories}
-                  subcategories={subcategories}
-                  onAddContact={onChangeContact}
                 />
               </TreeView>
             </div>

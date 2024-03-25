@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   return (
-    <login>
+    <div className="login">
       <section className="bg-info">
         <p
           ref={errRef}
@@ -112,7 +112,7 @@ const Login = () => {
           </span>
         </p>
       </section>
-    </login>
+    </div>
   );
 };
 

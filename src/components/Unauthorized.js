@@ -6,7 +6,7 @@ const Unauthorized = () => {
   const goBack = () => navigate(-1);
 
   return (
-    <unauthorized>
+    <div className="unauthorized">
       <section className="bg-info">
         <h1>Unauthorized</h1>
         <br />
@@ -15,7 +15,7 @@ const Unauthorized = () => {
           <button onClick={goBack}>Go Back</button>
         </div>
       </section>
-    </unauthorized>
+    </div>
   );
 };
 
