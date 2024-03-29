@@ -103,7 +103,7 @@ const EditCategoryModal = ({ categories, onEditCategory }) => {
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Edit category</div>
+          <div className="ps-4 pe-5 py-1">Edit category</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>

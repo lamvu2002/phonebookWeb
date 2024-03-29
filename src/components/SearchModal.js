@@ -1,65 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import Overlay from "react-bootstrap/Overlay";
 import Button from "@mui/material/Button";
+
 const SearchModal = ({ type, onSearch }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [show, setShow] = useState(false);
+  const target = useRef(null);
   const [inputValue, setInputValue] = useState("");
+  const [typeWidth, setTypeWidth] = useState(0);
+  const typew = useRef(null);
+  useEffect(() => {
+    if (typew.current) {
+      const width = typew.current.getBoundingClientRect().width;
+      setTypeWidth(width);
+    }
+  }, []);
+
+  const handleButtonClick = () => {
+    if (show) {
+      handleSearch();
+    } else {
+      setShow(true);
+    }
+  };
 
   const handleSearch = () => {
     onSearch(inputValue);
-    handleClose();
+    setShow(false);
+    setInputValue("");
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid white",
-    boxShadow: 24,
-    p: 4,
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
+
   return (
     <div className="d-flex justify-content-between align-items-center">
-      <span className="ml-auto">{type}</span>
-      <Button onClick={handleOpen}>
+      {!show && (
+        <span className="ml-auto" ref={typew}>
+          {type}
+        </span>
+      )}
+      {show && <div style={{ width: typeWidth }}></div>}
+      <Button ref={target} onClick={handleButtonClick}>
         <SearchIcon />
       </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="search-modal"
-        aria-describedby="to search"
-      >
-        <Box sx={style}>
-          <div className="modal-header d-flex justify-content-between align-items-center mb-3">
-            <h5 className="modal-title">Search</h5>
-            <Button className="btn-close" onClick={handleClose}></Button>
+      <Overlay target={target.current} show={show} placement="left">
+        {({ arrowProps, show: _show, ...props }) => (
+          <div
+            {...props}
+            style={{
+              position: "absolute",
+              padding: "2px 10px",
+              color: "white",
+              borderRadius: 3,
+              ...props.style,
+            }}
+          >
+            <div className="d-flex align-items-center">
+              <input
+                type="text"
+                className="form-control"
+                placeholder={type}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyPress}
+                autoFocus
+                style={{ width: `${typeWidth + 40}px` }}
+              />
+            </div>
           </div>
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder={type}
-              onChange={(e) => setInputValue(e.target.value)}
-              autoFocus
-            />
-            <Button
-              className="input-group-text"
-              onClick={() => handleSearch(inputValue)}
-            >
-              <SearchIcon />
-            </Button>
-          </div>
-        </Box>
-      </Modal>
+        )}
+      </Overlay>
     </div>
   );
 };
+
 export default SearchModal;

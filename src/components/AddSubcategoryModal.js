@@ -119,7 +119,7 @@ const AddSubcategoryModal = ({
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Add new subcategory</div>
+          <div className="ps-4 pe-4 py-1">Add new subcategory</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>

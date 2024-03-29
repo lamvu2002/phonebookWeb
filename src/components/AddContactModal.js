@@ -142,14 +142,17 @@ const AddContactModal = ({ categories, subcategories, onAddContact }) => {
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Add new contact</div>
+          <div className="ps-4 pe-5 py-1">Add new contact</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
           <div className="modal-header d-flex justify-content-between align-items-center mb-3">
             <h5 className="modal-title">Add new contact</h5>
-            <Button className="btn-close" onClick={handleClose}></Button>
+            <Button
+              className="btn-close"
+              onClick={() => handleClose()}
+            ></Button>
           </div>
           <form onSubmit={handleSubmit}>
             <label>Name:</label>

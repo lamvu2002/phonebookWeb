@@ -130,7 +130,7 @@ const EditSubcategoryModal = ({
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Edit subcategory</div>
+          <div className="ps-4 pe-5 py-1">Edit subcategory</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>

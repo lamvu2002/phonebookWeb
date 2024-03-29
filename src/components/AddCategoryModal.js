@@ -110,7 +110,7 @@ const AddCategoryModal = ({ categories, onAddCategory }) => {
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Add new category</div>
+          <div className="ps-4 pe-5 py-1">Add new category</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>

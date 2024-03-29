@@ -6,9 +6,16 @@ import axios from "../api/axios";
 import { Table } from "react-bootstrap";
 import { TreeView } from "@mui/x-tree-view/TreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Badge from "@mui/material/Badge";
 import PaginationComponent from "./PaginationComponent";
 import "./Admin.css";
 import SearchModal from "./SearchModal";
@@ -28,7 +35,7 @@ const Admin = () => {
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
@@ -88,22 +95,40 @@ const Admin = () => {
   const ContactTableRow = ({ contact }) => {
     return (
       <tr>
-        <td className="bg-info-subtle bg-opacity-10">
+        <td
+          className="bg-opacity-10"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           <img alt="Avatar" src={contact.imageLink} />
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.name}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.phoneNumber}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.emailAddress}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.address}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap ">
+        <td
+          className="bg-opacity-10 text-wrap "
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           <div className="d-flex align-middle justify-content-center">
             <EditButton
               categories={categories}
@@ -203,67 +228,74 @@ const Admin = () => {
     setCurrentPage(1);
     navigate("/login");
   };
+  function ContactCategoryCount(categoryId) {
+    // Filter contacts based on the provided categoryId and subcategoryId
+    const filteredContacts = contacts.filter(
+      (contact) => contact.categoryId === parseInt(categoryId)
+    );
 
+    // Return the count of contacts in the specified category and subcategory
+    return filteredContacts.length;
+  }
+  function ContactSubcategoryCount(subcategoryId) {
+    // Filter contacts based on the provided categoryId and subcategoryId
+    const filteredContacts = contacts.filter(
+      (contact) => contact.subcategoryId === parseInt(subcategoryId)
+    );
+
+    // Return the count of contacts in the specified category and subcategory
+    return filteredContacts.length;
+  }
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+    event.stopPropagation();
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className="container-fluid">
-      <div className="row py-2 bg-dark">
+      <div className="row py-2 " style={{ backgroundColor: "#232220" }}>
         <div className="col-sm-2 flex-grow">
-          <h3 className="text-white">Phonebook</h3>
-        </div>
-        <div className="col-sm-10 flex-grow d-flex justify-content-end gap-2">
-          <Button className="text-light" variant="outlined" onClick={logout}>
-            Log Out
-          </Button>
-        </div>
-      </div>
-      <div className="row mt-2 " style={{ height: "720px" }}>
-        <div className="col-sm-2 bg-dark-subtle flex-grow">
-          {categories.length > 0 ? (
-            <div className="text-primary-emphasis">
-              <TreeView
-                aria-label="file system navigator"
-                defaultCollapseIcon={<ExpandMoreIcon />}
-                defaultExpandIcon={<ChevronRightIcon />}
-                className="d-flex flex-column overflow-auto"
+          <AppBar position="static" color="transparent">
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="primary"
+                aria-label="menu"
+                onClick={handleMenuOpen}
               >
-                {categories.map((category) => (
-                  <TreeItem
-                    nodeId={`category-${category.categoryId}`}
-                    key={category.categoryId}
-                    label={category.categoryName}
-                  >
-                    {subcategories.map(
-                      (subcategory) =>
-                        subcategory.categoryId === category.categoryId && (
-                          <TreeItem
-                            nodeId={`subcategory-${subcategory.subcategoryId}`}
-                            key={subcategory.subcategoryId}
-                            label={subcategory.subcategoryName}
-                            onClick={() =>
-                              handleSubcategorySelect(subcategory.subcategoryId)
-                            }
-                          />
-                        )
-                    )}
-                  </TreeItem>
-                ))}
-                <TreeItem nodeId="add" label="Add">
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem sx={{ padding: 0 }}>
                   <AddContactModal
                     categories={categories}
                     subcategories={subcategories}
                     onAddContact={onChangeContact}
                   />
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <AddCategoryModal
                     categories={categories}
                     onAddCategory={onChangeCategory}
                   />
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <AddSubcategoryModal
                     subcategories={subcategories}
                     categories={categories}
                     onAddSubcategory={onChangeSubcategory}
                   />
-                </TreeItem>
-                <TreeItem nodeId="delete" label="Delete">
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <DeleteCategoryModal
                     categories={categories}
                     subcategories={subcategories}
@@ -272,6 +304,8 @@ const Admin = () => {
                     onDeleteSubcategory={onChangeSubcategory}
                     onDeleteContact={onChangeContact}
                   />
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <DeleteSubcategoryModal
                     categories={categories}
                     subcategories={subcategories}
@@ -279,19 +313,97 @@ const Admin = () => {
                     onDeleteSubcategory={onChangeSubcategory}
                     onDeleteContact={onChangeContact}
                   />
-                </TreeItem>
-                <TreeItem nodeId="edit" label="Edit">
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <EditCategoryModal
                     categories={categories}
                     onEditCategory={onChangeCategory}
                   />
+                </MenuItem>
+                <MenuItem sx={{ padding: 0 }}>
                   <EditSubcategoryModal
                     subcategories={subcategories}
                     categories={categories}
                     onEditSubcategory={onChangeSubcategory}
                   />
-                </TreeItem>
+                </MenuItem>
+              </Menu>
+              <h3 className="text-white ps-3">Admin </h3>
+            </Toolbar>
+          </AppBar>
+        </div>
+        <div className="col-sm-10 flex-grow d-flex justify-content-end gap-2">
+          <Button className="text-light" variant="outlined" onClick={logout}>
+            Log Out
+          </Button>
+        </div>
+      </div>
+      <div className="row mt-2 " style={{ height: "720px" }}>
+        <div
+          className="col-sm-2 flex-grow py-1"
+          style={{ backgroundColor: "#D5D3C8" }}
+        >
+          {categories.length > 0 ? (
+            <div className="text-primary-emphasis">
+              <TreeView
+                aria-label="file system navigator"
+                defaultCollapseIcon={<ArrowDropDownIcon />}
+                defaultExpandIcon={<ArrowRightIcon />}
+                className="d-flex flex-column overflow-auto"
+              >
+                {categories.map((category) => (
+                  <TreeItem
+                    className="pt-2"
+                    nodeId={`category-${category.categoryId}`}
+                    key={category.categoryId}
+                    label={
+                      <Badge
+                        badgeContent={ContactCategoryCount(category.categoryId)}
+                        color="primary"
+                        max={999}
+                      >
+                        <div
+                          style={{ marginRight: "17px", fontWeight: "bold" }}
+                        >
+                          {category.categoryName}
+                        </div>
+                      </Badge>
+                    }
+                  >
+                    {subcategories.map(
+                      (subcategory) =>
+                        subcategory.categoryId === category.categoryId && (
+                          <TreeItem
+                            className="pt-2"
+                            nodeId={`subcategory-${subcategory.subcategoryId}`}
+                            key={subcategory.subcategoryId}
+                            label={
+                              <Badge
+                                badgeContent={ContactSubcategoryCount(
+                                  subcategory.subcategoryId
+                                )}
+                                color="success"
+                                max={999}
+                              >
+                                <div
+                                  style={{
+                                    marginRight: "17px",
+                                  }}
+                                >
+                                  {subcategory.subcategoryName}
+                                </div>
+                              </Badge>
+                            }
+                            onClick={() =>
+                              handleSubcategorySelect(subcategory.subcategoryId)
+                            }
+                          />
+                        )
+                    )}
+                  </TreeItem>
+                ))}
                 <TreeItem
+                  className="pt-2"
                   nodeId="display-all"
                   label="Display all"
                   onClick={() => {
@@ -312,31 +424,49 @@ const Admin = () => {
               <Table striped bordered hover className="h-100 ">
                 <thead>
                   <tr>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <div className="mb-1">Image</div>
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className=" text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal type={"Name"} onSearch={handleSearchName} />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className=" text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Phone Number"}
                         onSearch={handleSearchPhoneNumber}
                       />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className=" text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Email Address"}
                         onSearch={handleSearchEmail}
                       />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className=" text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Address"}
                         onSearch={handleSearchAdress}
                       />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <div className="mb-1">Edit/Delete</div>
                     </th>
                   </tr>

@@ -1,6 +1,6 @@
 .table th,
 .table td {
-  width: 300px;
+  width: 350px;
   text-align: left;
   padding: 8px;
   white-space: nowrap;
@@ -8,13 +8,13 @@
   text-overflow: ellipsis;
 }
 img {
-  width: 3cm;
-  height: 4cm;
+  width: 1.5cm;
+  height: 2cm;
 }
 img[alt] {
   display: inline-block;
-  width: 3cm;
-  height: 4cm;
+  width: 1.5cm;
+  height: 2cm;
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
@@ -27,7 +27,6 @@ img[alt] {
 .delete-button:hover {
   color: red;
 }
-
 .cancel-button:hover {
   color: #007bff;
 }

@@ -6,8 +6,9 @@ import axios from "../api/axios";
 import { Table } from "react-bootstrap";
 import { TreeView } from "@mui/x-tree-view/TreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
 import PaginationComponent from "./PaginationComponent";
 import "./PhonebookForUser.css";
@@ -20,7 +21,7 @@ const PhonebookForUser = () => {
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
   const { setAuth } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -62,19 +63,34 @@ const PhonebookForUser = () => {
   const ContactTableRow = ({ contact }) => {
     return (
       <tr>
-        <td className="bg-info-subtle bg-opacity-10">
+        <td
+          className="bg-opacity-10"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           <img alt="Avatar" src={contact.imageLink} />
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.name}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.phoneNumber}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.emailAddress}
         </td>
-        <td className="bg-info-subtle bg-opacity-10 text-wrap">
+        <td
+          className="bg-opacity-10 text-wrap"
+          style={{ backgroundColor: "#DED3B8", color: "#000080" }}
+        >
           {contact.address}
         </td>
       </tr>
@@ -185,6 +201,24 @@ const PhonebookForUser = () => {
     setCurrentPage(1);
     navigate("/login");
   };
+  function ContactCategoryCount(categoryId) {
+    // Filter contacts based on the provided categoryId and subcategoryId
+    const filteredContacts = contacts.filter(
+      (contact) => contact.categoryId === parseInt(categoryId)
+    );
+
+    // Return the count of contacts in the specified category and subcategory
+    return filteredContacts.length;
+  }
+  function ContactSubcategoryCount(subcategoryId) {
+    // Filter contacts based on the provided categoryId and subcategoryId
+    const filteredContacts = contacts.filter(
+      (contact) => contact.subcategoryId === parseInt(subcategoryId)
+    );
+
+    // Return the count of contacts in the specified category and subcategory
+    return filteredContacts.length;
+  }
   const admin = async () => {
     navigate("/admin");
   };
@@ -204,28 +238,61 @@ const PhonebookForUser = () => {
         </div>
       </div>
       <div className="row mt-2 " style={{ height: "720px" }}>
-        <div className="col-sm-2 bg-dark-subtle flex-grow">
+        <div
+          className="col-sm-2 flex-grow py-1"
+          style={{ backgroundColor: "#D5D3C8" }}
+        >
           {categories.length > 0 ? (
             <div className="text-primary-emphasis">
               <TreeView
                 aria-label="file system navigator"
-                defaultCollapseIcon={<ExpandMoreIcon />}
-                defaultExpandIcon={<ChevronRightIcon />}
+                defaultCollapseIcon={<ArrowDropDownIcon />}
+                defaultExpandIcon={<ArrowRightIcon />}
                 className="d-flex flex-column overflow-auto"
               >
                 {categories.map((category) => (
                   <TreeItem
+                    className="pt-2"
                     nodeId={`category-${category.categoryId}`}
                     key={category.categoryId}
-                    label={category.categoryName}
+                    label={
+                      <Badge
+                        badgeContent={ContactCategoryCount(category.categoryId)}
+                        color="primary"
+                        max={999}
+                      >
+                        <div
+                          style={{ marginRight: "17px", fontWeight: "bold" }}
+                        >
+                          {category.categoryName}
+                        </div>
+                      </Badge>
+                    }
                   >
                     {subcategories.map(
                       (subcategory) =>
                         subcategory.categoryId === category.categoryId && (
                           <TreeItem
+                            className="pt-2"
                             nodeId={`subcategory-${subcategory.subcategoryId}`}
                             key={subcategory.subcategoryId}
-                            label={subcategory.subcategoryName}
+                            label={
+                              <Badge
+                                badgeContent={ContactSubcategoryCount(
+                                  subcategory.subcategoryId
+                                )}
+                                color="success"
+                                max={999}
+                              >
+                                <div
+                                  style={{
+                                    marginRight: "17px",
+                                  }}
+                                >
+                                  {subcategory.subcategoryName}
+                                </div>
+                              </Badge>
+                            }
                             onClick={() =>
                               handleSubcategorySelect(subcategory.subcategoryId)
                             }
@@ -235,6 +302,7 @@ const PhonebookForUser = () => {
                   </TreeItem>
                 ))}
                 <TreeItem
+                  className="pt-2"
                   nodeId="display-all"
                   label="Display all"
                   onClick={() => {
@@ -255,25 +323,40 @@ const PhonebookForUser = () => {
               <Table striped bordered hover className="h-100 text-break">
                 <thead>
                   <tr>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <div className="mb-1">Image</div>
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal type={"Name"} onSearch={handleSearchName} />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Phone Number"}
                         onSearch={handleSearchPhoneNumber}
                       />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Email Address"}
                         onSearch={handleSearchEmail}
                       />
                     </th>
-                    <th className="bg-info text-dark">
+                    <th
+                      className="text-info-emphasis"
+                      style={{ backgroundColor: "#F9C768" }}
+                    >
                       <SearchModal
                         type={"Address"}
                         onSearch={handleSearchAdress}

@@ -112,7 +112,7 @@ const DeleteSubcategoryModal = ({
             textTransform: "none",
           }}
         >
-          <div className="ps-3">Delete subcategory</div>
+          <div className="ps-4 pe-4 py-1">Delete subcategory</div>
         </Button>
       </div>
       <Modal open={open} onClose={handleClose}>

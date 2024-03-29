@@ -1,6 +1,6 @@
 import React from "react";
 import { Pagination } from "react-bootstrap";
-
+import "./Pagination.css";
 const PaginationComponent = ({ currentPage, totalPages, handlePageChange }) => {
   const renderPaginationItems = () => {
     const paginationItems = [];
@@ -109,7 +109,11 @@ const PaginationComponent = ({ currentPage, totalPages, handlePageChange }) => {
     return paginationItems;
   };
 
-  return <Pagination>{renderPaginationItems()}</Pagination>;
+  return (
+    <Pagination className="custom-pagination">
+      {renderPaginationItems()}
+    </Pagination>
+  );
 };
 
 export default PaginationComponent;
